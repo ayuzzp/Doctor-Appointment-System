@@ -69,6 +69,8 @@ const Header = () => {
    try {
     const response= await axios.post(api,{email:email,password:password})
     console.log(response)
+               localStorage.setItem("docname", response.data.doctorname);
+           localStorage.setItem("docid", response.data._id);
     toast.success("Login Successfully");
      navigate("/doctordashboard");
    } catch (error) {
@@ -99,6 +101,10 @@ const Header = () => {
           <Nav.Link as={Link} to="searchdoctor" className="d-flex align-items-center gap-1">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
           <span>Search</span>
+        </Nav.Link>
+        <Nav.Link as={Link} to="searchbycity" >
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <span>SearchByCity</span>
         </Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
       </Nav>
