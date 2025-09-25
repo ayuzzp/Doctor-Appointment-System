@@ -1,4 +1,5 @@
 const DoctorModel = require("../models/doctorModel");
+const patientModel = require("../models/patientModel");
 
 const doctorSave=async(req, res)=>{
  try {
@@ -61,9 +62,52 @@ const searchDoctor=async(req,res)=>{
     }
 }
 
+const searchDoctorByCity = async (req, res) => {
+  try {
+    const { city } = req.body;
+   const doctor = await DoctorModel.find({
+  city: { $regex: new RegExp(city, "i") }
+});
+
+    res.status(200).send(doctor);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+};
+
+const getdoctorInfo=async(req, res)=>{
+  const {id} = req.query;
+  const Doctor = await DoctorModel.findById(id);
+  res.send(Doctor);
+}
+
+const patientSave=async(req,res)=>{
+const {id,patientname,deseases,address,contact,email} = req.body
+const Patient = await patientModel.create({
+    patientname:patientname,
+    deseases:deseases,
+    address:address,
+    contactno:contact,
+    email:email,
+    docid:id
+})
+res.status(201).send("Patient detail save!!")
+}
+
+const getPatientDetail=async(req,res)=>{
+          const {id} = req.query;
+      const patient = await patientModel.find({docid:id})
+      res.send(patient);
+
+}
+
 module.exports = {
      doctorSave,
      doctorLogin,
      doctorInfo,
-     searchDoctor
+     searchDoctor,
+     searchDoctorByCity,
+     getdoctorInfo,
+     patientSave,
+     getPatientDetail
  };
